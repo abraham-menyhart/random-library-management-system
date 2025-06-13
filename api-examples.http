@@ -127,3 +127,33 @@ GET {{baseUrl}}/actuator/metrics
 Accept: application/json
 
 ###
+
+### Get books borrowed counter
+GET {{baseUrl}}/actuator/metrics/library.books.borrowed.total
+Accept: application/json
+
+###
+
+### Get books added counter
+GET {{baseUrl}}/actuator/metrics/library.books.added.total
+Accept: application/json
+
+###
+
+### Get borrowers created counter
+GET {{baseUrl}}/actuator/metrics/library.borrowers.created.total
+Accept: application/json
+
+###
+
+### Get book operation timer metrics
+GET {{baseUrl}}/actuator/metrics/library.book.operation.duration
+Accept: application/json
+
+###
+
+### Get borrower operation timer metrics
+GET {{baseUrl}}/actuator/metrics/library.borrower.operation.duration
+Accept: application/json
+
+###
