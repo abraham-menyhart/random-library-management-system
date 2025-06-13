@@ -1,0 +1,129 @@
+### Library Management System API Examples
+### Use these examples in IntelliJ IDEA HTTP Client
+
+### Variables
+@baseUrl = http://localhost:8080
+
+### Health Check
+GET {{baseUrl}}/actuator/health
+
+###
+
+### Get all books
+GET {{baseUrl}}/api/books
+Accept: application/json
+
+###
+
+### Get all borrowers  
+GET {{baseUrl}}/api/borrowers
+Accept: application/json
+
+###
+
+### Create a new borrower
+POST {{baseUrl}}/api/borrowers
+Content-Type: application/json
+
+{
+  "name": "John Doe2",
+  "email": "john.doe2@email.com"
+}
+
+###
+
+### Create another borrower
+POST {{baseUrl}}/api/borrowers
+Content-Type: application/json
+
+{
+  "name": "Jane Smith",
+  "email": "jane.smith@email.com"
+}
+
+###
+
+### Add a new book
+POST {{baseUrl}}/api/books
+Content-Type: application/json
+
+{
+  "title": "1984",
+  "author": "George Orwell",
+  "isbn": "978-0451524935"
+}
+
+###
+
+### Add another book
+POST {{baseUrl}}/api/books
+Content-Type: application/json
+
+{
+  "title": "To Kill a Mockingbird",
+  "author": "Harper Lee",
+  "isbn": "978-0061120084"
+}
+
+###
+
+### Add a book without ISBN
+POST {{baseUrl}}/api/books
+Content-Type: application/json
+
+{
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald"
+}
+
+###
+
+### Get borrower by ID (replace 1 with actual ID from previous responses)
+GET {{baseUrl}}/api/borrowers/1
+Accept: application/json
+
+###
+
+### Borrow a book (replace IDs with actual values from previous responses)
+POST {{baseUrl}}/api/books/1/borrow/1
+
+###
+
+### Get books borrowed by borrower
+GET {{baseUrl}}/api/borrowers/1/books
+Accept: application/json
+
+###
+
+### Try to borrow an already borrowed book (should return 409 Conflict)
+POST {{baseUrl}}/api/books/1/borrow/2
+
+###
+
+### Try to create borrower with duplicate email (should return 400 Bad Request)
+POST {{baseUrl}}/api/borrowers
+Content-Type: application/json
+
+{
+  "name": "John Smith",
+  "email": "john.doe@email.com"
+}
+
+###
+
+### Try to get non-existent borrower (should return 404 Not Found)
+GET {{baseUrl}}/api/borrowers/999
+Accept: application/json
+
+###
+
+### Try to borrow non-existent book (should return 404 Not Found)  
+POST {{baseUrl}}/api/books/999/borrow/1
+
+###
+
+### Get application metrics
+GET {{baseUrl}}/actuator/metrics
+Accept: application/json
+
+###

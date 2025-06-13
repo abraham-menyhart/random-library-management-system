@@ -1,0 +1,303 @@
+openapi: 3.0.3
+info:
+  title: Library Management System API
+  description: RESTful web service for managing library books and borrowers
+  version: 1.0.0
+  contact:
+    name: Library Management System
+servers:
+  - url: http://localhost:8080
+    description: Development server
+
+paths:
+  /api/books:
+    get:
+      summary: Get all books
+      tags:
+        - Books
+      responses:
+        '200':
+          description: List of all books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookDto'
+    
+    post:
+      summary: Add a new book
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookCreateDto'
+      responses:
+        '201':
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDto'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/books/{bookId}/borrow/{borrowerId}:
+    post:
+      summary: Borrow a book
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: borrowerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Book borrowed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDto'
+        '404':
+          description: Book or borrower not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Book already borrowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/borrowers:
+    get:
+      summary: Get all borrowers
+      tags:
+        - Borrowers
+      responses:
+        '200':
+          description: List of all borrowers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BorrowerDto'
+    
+    post:
+      summary: Create a new borrower
+      tags:
+        - Borrowers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BorrowerCreateDto'
+      responses:
+        '201':
+          description: Borrower created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowerDto'
+        '400':
+          description: Invalid input or duplicate email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/borrowers/{id}:
+    get:
+      summary: Get borrower by ID
+      tags:
+        - Borrowers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Borrower details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowerDto'
+        '404':
+          description: Borrower not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/borrowers/{id}/books:
+    get:
+      summary: Get books borrowed by borrower
+      tags:
+        - Borrowers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of borrowed books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookDto'
+        '404':
+          description: Borrower not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /actuator/health:
+    get:
+      summary: Health check endpoint
+      tags:
+        - Monitoring
+      responses:
+        '200':
+          description: Application health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: UP
+
+  /actuator/metrics:
+    get:
+      summary: Application metrics
+      tags:
+        - Monitoring
+      responses:
+        '200':
+          description: Application metrics
+          content:
+            application/json:
+              schema:
+                type: object
+
+components:
+  schemas:
+    BookDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: "1984"
+        author:
+          type: string
+          example: "George Orwell"
+        isbn:
+          type: string
+          example: "978-0451524935"
+        available:
+          type: boolean
+          example: true
+        borrowerId:
+          type: integer
+          format: int64
+          nullable: true
+          example: null
+
+    BookCreateDto:
+      type: object
+      required:
+        - title
+        - author
+      properties:
+        title:
+          type: string
+          example: "1984"
+        author:
+          type: string
+          example: "George Orwell"
+        isbn:
+          type: string
+          example: "978-0451524935"
+
+    BorrowerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@email.com"
+
+    BorrowerCreateDto:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@email.com"
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          example: 404
+        error:
+          type: string
+          example: "Not Found"
+        message:
+          type: string
+          example: "Book not found with ID: 1"
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
