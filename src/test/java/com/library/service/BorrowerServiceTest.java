@@ -10,6 +10,8 @@ import com.library.mapper.BookMapper;
 import com.library.mapper.BorrowerMapper;
 import com.library.repository.BookRepository;
 import com.library.repository.BorrowerRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Timer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,6 +41,12 @@ class BorrowerServiceTest {
 
     @Mock
     private BookMapper bookMapper;
+
+    @Mock
+    private Counter borrowersCreatedCounter;
+
+    @Mock
+    private Timer borrowerOperationTimer;
 
     @InjectMocks
     private BorrowerService borrowerService;

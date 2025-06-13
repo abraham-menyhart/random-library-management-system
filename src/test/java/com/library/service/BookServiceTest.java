@@ -9,6 +9,8 @@ import com.library.exception.BorrowerNotFoundException;
 import com.library.mapper.BookMapper;
 import com.library.repository.BookRepository;
 import com.library.repository.BorrowerRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Timer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,6 +37,15 @@ class BookServiceTest {
 
     @Mock
     private BookMapper bookMapper;
+
+    @Mock
+    private Counter booksBorrowedCounter;
+
+    @Mock
+    private Counter booksAddedCounter;
+
+    @Mock
+    private Timer bookOperationTimer;
 
     @InjectMocks
     private BookService bookService;

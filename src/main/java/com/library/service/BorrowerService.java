@@ -10,6 +10,8 @@ import com.library.mapper.BookMapper;
 import com.library.mapper.BorrowerMapper;
 import com.library.repository.BookRepository;
 import com.library.repository.BorrowerRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Timer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,41 +31,64 @@ public class BorrowerService {
     private final BookRepository bookRepository;
     private final BorrowerMapper borrowerMapper;
     private final BookMapper bookMapper;
+    private final Counter borrowersCreatedCounter;
+    private final Timer borrowerOperationTimer;
     
     public BorrowerDto createBorrower(BorrowerDto borrowerDto) {
-        log.debug("Creating new borrower with email: {}", borrowerDto.getEmail());
-        
-        validateEmailUniqueness(borrowerDto.getEmail());
-        
-        Borrower borrower = borrowerMapper.toEntity(borrowerDto);
-        Borrower savedBorrower = borrowerRepository.save(borrower);
-        
-        log.info("Borrower created successfully with ID: {}", savedBorrower.getId());
-        return borrowerMapper.toDto(savedBorrower);
+        Timer.Sample sample = Timer.start();
+        try {
+            log.debug("Creating new borrower with email: {}", borrowerDto.getEmail());
+            
+            validateEmailUniqueness(borrowerDto.getEmail());
+            
+            Borrower borrower = borrowerMapper.toEntity(borrowerDto);
+            Borrower savedBorrower = borrowerRepository.save(borrower);
+            borrowersCreatedCounter.increment();
+            
+            log.info("Borrower created successfully with ID: {}", savedBorrower.getId());
+            return borrowerMapper.toDto(savedBorrower);
+        } finally {
+            sample.stop(borrowerOperationTimer);
+        }
     }
     
     public BorrowerDto getBorrower(Long id) {
-        log.debug("Fetching borrower with ID: {}", id);
-        
-        Borrower borrower = findBorrowerOrThrow(id);
-        
-        return borrowerMapper.toDto(borrower);
+        Timer.Sample sample = Timer.start();
+        try {
+            log.debug("Fetching borrower with ID: {}", id);
+            
+            Borrower borrower = findBorrowerOrThrow(id);
+            
+            return borrowerMapper.toDto(borrower);
+        } finally {
+            sample.stop(borrowerOperationTimer);
+        }
     }
     
     public List<BookDto> getBorrowedBooks(Long borrowerId) {
-        log.debug("Fetching books borrowed by borrower ID: {}", borrowerId);
-        
-        validateBorrowerExists(borrowerId);
-        
-        List<Book> borrowedBooks = bookRepository.findByBorrowerId(borrowerId);
-        return mapBooksToDto(borrowedBooks);
+        Timer.Sample sample = Timer.start();
+        try {
+            log.debug("Fetching books borrowed by borrower ID: {}", borrowerId);
+            
+            validateBorrowerExists(borrowerId);
+            
+            List<Book> borrowedBooks = bookRepository.findByBorrowerId(borrowerId);
+            return mapBooksToDto(borrowedBooks);
+        } finally {
+            sample.stop(borrowerOperationTimer);
+        }
     }
     
     public List<BorrowerDto> getAllBorrowers() {
-        log.debug("Fetching all borrowers");
-        
-        List<Borrower> borrowers = borrowerRepository.findAll();
-        return mapBorrowersToDto(borrowers);
+        Timer.Sample sample = Timer.start();
+        try {
+            log.debug("Fetching all borrowers");
+            
+            List<Borrower> borrowers = borrowerRepository.findAll();
+            return mapBorrowersToDto(borrowers);
+        } finally {
+            sample.stop(borrowerOperationTimer);
+        }
     }
     
     private void validateEmailUniqueness(String email) {
