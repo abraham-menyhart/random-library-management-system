@@ -1,0 +1,53 @@
+# Take-Home Coding Challenge: Library Management System
+
+## Objective
+
+The goal of this coding challenge is to assess your ability to develop a RESTful web service, implement a simple database interaction, and write unit and integration tests, using  **Java**. The application should be a Library Management System with basic functionality.
+
+## Requirements
+
+### Functional Requirements
+
+1. **Book Endpoints**:
+    - **List Books**: Retrieve a list of all available books.
+    - **Add Book**: Add a new book to the library.
+    - **Borrow Book**: Borrow a book by specifying the book ID and borrower ID.
+
+2. **Borrower Endpoints**:
+    - **Create Borrower**: Register a new borrower.
+    - **Get Borrower**: Retrieve details of a specific borrower.
+    - **Borrowed Books**: Retrieve the list of books borrowed by a specific borrower.
+
+### Non-Functional Requirements
+
+1. **Database**:
+    - Use  external database  PostgreSQL.
+    - Ensure the application can run locally with the database configured appropriately: docker.
+2. **Observability**:
+    - Instrument your application with at least one OpenTelemetry metric and one span
+
+### Testing Requirements
+
+1. **Unit Tests**:
+    - Write unit tests for the main components of your application.
+    - Use any testing framework of your choice.
+
+### Deployment Instructions
+
+1. **Local Deployment**:
+    - The application should be able to run locally.
+    - Provide a README file or similar with instructions on how to set up and run the application locally.
+    - Include necessary configuration files and scripts.
+
+
+### Evaluation Criteria
+
+1. Code quality and structure.
+2. We do not expect you to spend more than a few hours on this challenge. Consider this a proof of concept. Not everything has to be perfect. If you don't have time to finish everything, please explain which parts are incomplete.
+3. Correctness and completeness of the implemented features.
+4. Quality of the tests.  We'd rather see a few good tests, than many basic tests.
+5. Quality of instrumentation. We'd rather see a single span or metric added with a good explanation of why it's important than many spans that don't add a lot of value.
+6. Documentation and ease of setup.
+7. During the interview, we will expect you to demo (Postman/curl or alternative) and discuss the code you submitted, so be prepared to talk in-depth about the implementation, enhancements, etc.
+
+All the best, and we look forward to seeing your implementation!

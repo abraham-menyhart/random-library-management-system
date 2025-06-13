@@ -1,0 +1,1 @@
+-- Sample data will be added in Phase 2 after entities are created
