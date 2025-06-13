@@ -30,8 +30,7 @@ public class DataLoader implements CommandLineRunner {
         // Create borrowers
         Borrower borrower1 = borrowerRepository.save(new Borrower("John Doe", "john.doe@email.com"));
         Borrower borrower2 = borrowerRepository.save(new Borrower("Jane Smith", "jane.smith@email.com"));
-        Borrower borrower3 = borrowerRepository.save(new Borrower("Alice Johnson", "alice.johnson@email.com"));
-        
+
         // Create books
         Book book1 = new Book("The Great Gatsby", "F. Scott Fitzgerald", "9780743273565");
         bookRepository.save(book1);
