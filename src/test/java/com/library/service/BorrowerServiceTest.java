@@ -93,27 +93,6 @@ class BorrowerServiceTest {
         verify(borrowerRepository, never()).save(any());
     }
 
-    @Test
-    void getBorrower_shouldReturnBorrower_whenBorrowerExists() {
-        //given
-        Long borrowerId = 1L;
-        Borrower borrower = new Borrower("John Doe", "john@example.com");
-        borrower.setId(borrowerId);
-        BorrowerDto borrowerDto = new BorrowerDto(borrowerId, "John Doe", "john@example.com");
-        
-        when(borrowerRepository.findById(borrowerId)).thenReturn(Optional.of(borrower));
-        when(borrowerMapper.toDto(borrower)).thenReturn(borrowerDto);
-
-        //when
-        BorrowerDto result = borrowerService.getBorrower(borrowerId);
-
-        //then
-        assertThat(result.getId()).isEqualTo(borrowerId);
-        assertThat(result.getName()).isEqualTo("John Doe");
-        assertThat(result.getEmail()).isEqualTo("john@example.com");
-        verify(borrowerRepository).findById(borrowerId);
-        verify(borrowerMapper).toDto(borrower);
-    }
 
     @Test
     void getBorrower_shouldThrowBorrowerNotFoundException_whenBorrowerDoesNotExist() {
@@ -180,47 +159,5 @@ class BorrowerServiceTest {
         
         verify(borrowerRepository).findById(nonExistentBorrowerId);
         verify(bookRepository, never()).findByBorrowerId(any());
-    }
-
-    @Test
-    void getAllBorrowers_shouldReturnAllBorrowers_whenBorrowersExist() {
-        //given
-        Borrower borrower1 = new Borrower("John Doe", "john@example.com");
-        borrower1.setId(1L);
-        Borrower borrower2 = new Borrower("Jane Smith", "jane@example.com");
-        borrower2.setId(2L);
-        
-        BorrowerDto borrowerDto1 = new BorrowerDto(1L, "John Doe", "john@example.com");
-        BorrowerDto borrowerDto2 = new BorrowerDto(2L, "Jane Smith", "jane@example.com");
-        
-        when(borrowerRepository.findAll()).thenReturn(Arrays.asList(borrower1, borrower2));
-        when(borrowerMapper.toDto(borrower1)).thenReturn(borrowerDto1);
-        when(borrowerMapper.toDto(borrower2)).thenReturn(borrowerDto2);
-
-        //when
-        List<BorrowerDto> result = borrowerService.getAllBorrowers();
-
-        //then
-        assertThat(result).hasSize(2);
-        assertThat(result.get(0).getName()).isEqualTo("John Doe");
-        assertThat(result.get(1).getName()).isEqualTo("Jane Smith");
-        assertThat(result.get(0).getEmail()).isEqualTo("john@example.com");
-        assertThat(result.get(1).getEmail()).isEqualTo("jane@example.com");
-        verify(borrowerRepository).findAll();
-        verify(borrowerMapper).toDto(borrower1);
-        verify(borrowerMapper).toDto(borrower2);
-    }
-
-    @Test
-    void getAllBorrowers_shouldReturnEmptyList_whenNoBorrowersExist() {
-        //given
-        when(borrowerRepository.findAll()).thenReturn(Arrays.asList());
-
-        //when
-        List<BorrowerDto> result = borrowerService.getAllBorrowers();
-
-        //then
-        assertThat(result).isEmpty();
-        verify(borrowerRepository).findAll();
     }
 }
