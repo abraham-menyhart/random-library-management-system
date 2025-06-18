@@ -145,4 +145,14 @@ Accept: application/json
 GET {{baseUrl}}/actuator/metrics/library.borrower.operation.duration
 Accept: application/json
 
+### OpenTelemetry Span Monitoring
+
+### Check Prometheus metrics for OpenTelemetry spans
+GET {{baseUrl}}/actuator/prometheus
+Accept: text/plain
+
 ###
+
+### Check specific book borrow span timer
+GET {{baseUrl}}/actuator/metrics/book.borrow
+Accept: application/json

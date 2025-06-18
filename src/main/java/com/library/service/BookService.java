@@ -10,6 +10,7 @@ import com.library.repository.BookRepository;
 import com.library.repository.BorrowerRepository;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Timer;
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,8 @@ public class BookService {
             sample.stop(bookOperationTimer);
         }
     }
-    
+
+    @Observed(name = "book.borrow", contextualName = "borrowing-book")
     public BookDto borrowBook(Long bookId, Long borrowerId) {
         Timer.Sample sample = Timer.start();
         try {
