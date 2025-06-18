@@ -84,8 +84,8 @@ Accept: application/json
 
 ###
 
-### Borrow a book (replace IDs with actual values from previous responses)
-POST {{baseUrl}}/api/books/1/borrow/1
+### Borrow a book (should increment successful counter)
+POST {{baseUrl}}/api/books/31/borrow/1
 
 ###
 
@@ -95,7 +95,7 @@ Accept: application/json
 
 ###
 
-### Try to borrow an already borrowed book (should return 409 Conflict)
+### Try to borrow an already borrowed book (should return 409 Conflict and increment failed counter)
 POST {{baseUrl}}/api/books/1/borrow/2
 
 ###
@@ -106,8 +106,13 @@ Accept: application/json
 
 ###
 
-### Try to borrow non-existent book (should return 404 Not Found)  
+### Try to borrow non-existent book (should return 404 Not Found and increment failed counter)
 POST {{baseUrl}}/api/books/999/borrow/1
+
+###
+
+### Try to borrow with non-existent borrower (should increment failed counter)
+POST {{baseUrl}}/api/books/1/borrow/999
 
 ###
 
@@ -117,32 +122,14 @@ Accept: application/json
 
 ###
 
-### Get books borrowed counter
-GET {{baseUrl}}/actuator/metrics/library.books.borrowed.total
+### Get successful borrows counter
+GET {{baseUrl}}/actuator/metrics/library.borrows.successful.total
 Accept: application/json
 
 ###
 
-### Get books added counter
-GET {{baseUrl}}/actuator/metrics/library.books.added.total
-Accept: application/json
-
-###
-
-### Get borrowers created counter
-GET {{baseUrl}}/actuator/metrics/library.borrowers.created.total
-Accept: application/json
-
-###
-
-### Get book operation timer metrics
-GET {{baseUrl}}/actuator/metrics/library.book.operation.duration
-Accept: application/json
-
-###
-
-### Get borrower operation timer metrics
-GET {{baseUrl}}/actuator/metrics/library.borrower.operation.duration
+### Get failed borrows counter
+GET {{baseUrl}}/actuator/metrics/library.borrows.failed.total
 Accept: application/json
 
 ### OpenTelemetry Span Monitoring
