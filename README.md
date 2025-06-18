@@ -30,6 +30,3 @@ RESTful web service for managing library books and borrowers built with Spring B
 - **Java 21** + **Spring Boot 3.2.1**
 - **PostgreSQL** database (Docker)
 - **Maven** build tool
-- **45 tests** with **61% coverage**
-
-Run tests: `mvn test`
