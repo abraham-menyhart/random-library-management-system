@@ -100,17 +100,6 @@ POST {{baseUrl}}/api/books/1/borrow/2
 
 ###
 
-### Try to create borrower with duplicate email (should return 400 Bad Request)
-POST {{baseUrl}}/api/borrowers
-Content-Type: application/json
-
-{
-  "name": "John Smith",
-  "email": "john.doe@email.com"
-}
-
-###
-
 ### Try to get non-existent borrower (should return 404 Not Found)
 GET {{baseUrl}}/api/borrowers/999
 Accept: application/json
